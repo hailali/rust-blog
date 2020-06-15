@@ -1,0 +1,21 @@
+[package]
+name = "hello-rocket"
+version = "0.1.0"
+authors = ["Abdellah"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
+rocket = { version = "0.4.4", default-features = false }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rocket_contrib = "0.4.4"
+jsonwebtoken = "7"
+rust-argon2 = "0.8"
+log = "0.4"
+diesel = { version = "1.0.0", features = ["sqlite"] }
+dotenv = "0.9.0"
+
+libsqlite3-sys = { version = ">=0.8.0, <0.18.0", features = ["bundled"] }
+
