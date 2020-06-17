@@ -10,8 +10,3 @@ pub mod db;
 pub mod repository;
 pub mod serialization;
 pub mod security;
-
-
-fn test() -> Box<dyn Table> {
-
-}
