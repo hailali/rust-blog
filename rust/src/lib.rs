@@ -2,7 +2,7 @@
 extern crate diesel;
 extern crate dotenv;
 
-use diesel::Table;
+
 
 pub mod models;
 pub mod schema;
