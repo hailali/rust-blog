@@ -1,10 +1,9 @@
 use diesel::{Queryable};
 use serde::{Deserialize, Serialize};
 
-use crate::schema::{user, comment, post};
+use crate::schema::{user, comment, post, tag};
 use crate::security::PasswordEncoder;
 use crate::serialization::ReceivedUser;
-
 
 type DB = diesel::sqlite::Sqlite;
 
@@ -26,6 +25,11 @@ pub struct CommentId {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserId {
+    id: i32
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TagId {
     id: i32
 }
 
@@ -59,6 +63,15 @@ impl Identifier for Post {
     }
 }
 
+impl Identifier for Tag {
+    type Id = TagId;
+
+    fn id(&self) -> i32 {
+        self.id.get()
+    }
+}
+
+
 pub trait ModelId {
     type ModelType;
 
@@ -84,6 +97,14 @@ impl ModelId for CommentId {
 }
 
 impl ModelId for UserId {
+    type ModelType = Self;
+
+    fn new(id: i32) -> Self::ModelType { Self { id } }
+    fn get(&self) -> i32 { self.id }
+    fn to_string(&self) -> String { format!("{}", self.id) }
+}
+
+impl ModelId for TagId {
     type ModelType = Self;
 
     fn new(id: i32) -> Self::ModelType { Self { id } }
@@ -275,3 +296,48 @@ impl User {
 
 #[derive(Debug, Serialize)]
 pub struct Users(pub Vec<User>);
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Tag {
+    pub id: TagId,
+    pub name: String
+}
+
+pub struct Tags(pub Vec<Tag>);
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TagUser {
+    tag_id: i32,
+    user_id: i32,
+}
+
+#[derive(Insertable)]
+#[table_name="tag"]
+pub struct NewTag {
+    name: String
+}
+
+impl From<&Tag> for NewTag {
+    fn from(tag: &Tag) -> Self {
+        Self {
+            name: tag.name
+        }
+    }
+}
+
+#[derive(AsChangeset)]
+#[table_name="tag"]
+pub struct TagForm<'a> {
+    pub name: Option<&'a String>
+}
+
+impl <'a>Queryable<tag::SqlType, DB> for Tag {
+    type Row = (i32, String);
+
+    fn build(row: Self::Row) -> Self {
+        Tag {
+            id: TagId::new(row.0),
+            name: row.1
+        }
+    }
+}

@@ -10,12 +10,15 @@ extern crate rocket;
 use diesel::result::Error;
 use rocket::http::Status;
 use rocket_contrib::json::Json;
+use rocket_cors;
 
 use hello_rocket::db::Db;
 use hello_rocket::models::{ModelId, Post, Posts, User, UserId, Users};
 use hello_rocket::repository::RepositoryTrait;
 use hello_rocket::security::{JwtGuard, JwtToken, LoginInfo, PasswordEncoder};
 use hello_rocket::serialization::{ErrorMessage, ReceivedPost, ReceivedUser};
+use rocket_cors::{AllowedHeaders, AllowedOrigins};
+use rocket::http::Method;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -163,10 +166,21 @@ fn not_found_error() -> ErrorMessage {
 }
 
 fn main() {
+    // You can also deserialize this
+    let cors = rocket_cors::CorsOptions {
+        allowed_origins: AllowedOrigins::All,
+        allowed_methods: vec![Method::Get, Method::Post].into_iter().map(From::from).collect(),
+        allowed_headers: AllowedHeaders::all(),
+        allow_credentials: true,
+        ..Default::default()
+    }
+    .to_cors().unwrap();
+
     rocket::ignite()
         .mount("/", routes![index, login])
         .mount("/users", routes![add_user, get_users, get_me, delete_user, update_user_me,update_user  ])
         .mount("/posts", routes![post, posts, add_post, delete_post])
         .register(catchers![internal_error, not_found_error])
+        .attach(cors)
         .launch();
 }

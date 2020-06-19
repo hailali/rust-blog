@@ -1,10 +1,6 @@
-
-
 use diesel::result::Error;
 
-
 use crate::models::Identifier;
-
 
 pub trait RepositoryTrait {
     type Item: Identifier;
@@ -20,3 +16,4 @@ pub trait RepositoryTrait {
 pub mod post;
 pub mod comment;
 pub mod user;
+pub mod tag;

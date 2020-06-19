@@ -19,6 +19,20 @@ table! {
 }
 
 table! {
+    tag (id) {
+        id -> Integer,
+        name -> Text,
+    }
+}
+
+table! {
+    tag_user (tag_id, user_id) {
+        tag_id -> Integer,
+        user_id -> Integer,
+    }
+}
+
+table! {
     user (id) {
         id -> Integer,
         username -> Text,
@@ -32,9 +46,13 @@ table! {
 
 joinable!(comment -> post (post_id));
 joinable!(post -> user (user_id));
+joinable!(tag_user -> tag (tag_id));
+joinable!(tag_user -> user (user_id));
 
 allow_tables_to_appear_in_same_query!(
     comment,
     post,
+    tag,
+    tag_user,
     user,
 );
