@@ -18,7 +18,9 @@ function PrivateRoute({ children, ...rest }) {
         <Route
             {...rest}
             render={({ location }) =>
-                 sessionStorage.getItem('token') !== null ? (
+                sessionStorage.getItem('exp') !== null &&
+                sessionStorage.getItem('token') !== null &&
+                sessionStorage.getItem('exp') > Math.floor(Date.now() / 1000) ? (
                     children
                 ) : (
                     <Redirect
