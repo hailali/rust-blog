@@ -41,7 +41,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/rust/Cargo.toml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="org.rust.hideDetachedFileNotificationsC:/Users/Abdellah/PycharmProjects/hello-rocket/src/db.rs" value="true" />
     <property name="org.rust.hideDetachedFileNotificationsC:/Users/Abdellah/PycharmProjects/hello-rocket/src/models.rs" value="true" />
@@ -51,11 +51,14 @@
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Shell Script" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Abdellah\PycharmProjects\hello-rocket\rust" />
+      <recent name="C:\Users\Abdellah\PycharmProjects\hello-rocket\src" />
       <recent name="C:\Users\Abdellah\PycharmProjects\hello-rocket\src\repository" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Abdellah\PycharmProjects\hello-rocket\src" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Abdellah\PycharmProjects\hello-rocket" />
+      <recent name="C:\Users\Abdellah\PycharmProjects\hello-rocket\rust\src\repository" />
       <recent name="C:\Users\Abdellah\PycharmProjects\hello-rocket\src\repository" />
     </key>
   </component>
@@ -93,18 +96,18 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="397" y="143" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.680@0.0.1280.680" timestamp="1590123109718" />
-    <state x="446" y="57" key="#com.intellij.ide.util.MemberChooser" timestamp="1590909501320">
+    <state x="446" y="57" key="#com.intellij.ide.util.MemberChooser" timestamp="1592545077052">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="446" y="57" key="#com.intellij.ide.util.MemberChooser/0.0.1280.680@0.0.1280.680" timestamp="1590909501320" />
+    <state x="446" y="57" key="#com.intellij.ide.util.MemberChooser/0.0.1280.680@0.0.1280.680" timestamp="1592545077052" />
     <state x="371" y="88" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1589873483774">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="371" y="88" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.680@0.0.1280.680" timestamp="1589873483774" />
-    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1590046104485">
+    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1592373477586">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1590046104485" />
+    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1592373477586" />
     <state x="284" y="0" key="SettingsEditor" timestamp="1588660228094">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -117,9 +120,9 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="0" y="0" width="587" height="680" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1590131831363" />
-    <state x="623" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1591592182286">
+    <state x="623" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1592544833114">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="623" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1591592182286" />
+    <state x="623" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1592544833114" />
   </component>
 </project>
