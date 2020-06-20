@@ -9,7 +9,6 @@ use diesel::SqliteConnection;
 use crate::models::*;
 use crate::repository::RepositoryTrait;
 use crate::schema::tag;
-use crate::security::LoginInfo;
 
 pub struct TagRepository<'a> {
     pub con: &'a SqliteConnection

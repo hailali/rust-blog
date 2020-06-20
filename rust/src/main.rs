@@ -1,6 +1,6 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #![feature(in_band_lifetimes)]
-#![recursion_limit="256"]
+#![recursion_limit = "256"]
 
 extern crate argon2;
 extern crate log;
@@ -8,17 +8,17 @@ extern crate log;
 extern crate rocket;
 
 use diesel::result::Error;
+use rocket::http::Method;
 use rocket::http::Status;
 use rocket_contrib::json::Json;
 use rocket_cors;
+use rocket_cors::{AllowedHeaders, AllowedOrigins};
 
 use hello_rocket::db::Db;
-use hello_rocket::models::{ModelId, Post, Posts, User, UserId, Users};
+use hello_rocket::models::{ModelId, Post, Posts, Tag, Tags, User, UserId, Users};
 use hello_rocket::repository::RepositoryTrait;
 use hello_rocket::security::{JwtGuard, JwtToken, LoginInfo, PasswordEncoder};
-use hello_rocket::serialization::{ErrorMessage, ReceivedPost, ReceivedUser};
-use rocket_cors::{AllowedHeaders, AllowedOrigins};
-use rocket::http::Method;
+use hello_rocket::serialization::{ErrorMessage, ReceivedPost, ReceivedTag, ReceivedUser, SentTag};
 
 #[get("/")]
 fn index() -> &'static str {
@@ -109,6 +109,13 @@ fn get_me(jwt_guard: JwtGuard) -> Result<Option<User>, ErrorMessage> {
     Ok(user)
 }
 
+#[get("/<id>")]
+fn get_user(_jwt_guard: JwtGuard, id: i32) -> Result<Option<User>, ErrorMessage> {
+    let user = Db::new().get_user_repo().find(id)?;
+
+    Ok(user)
+}
+
 #[put("/<id>", format = "json", data = "<received_user>")]
 fn update_user(id: i32, received_user: Json<ReceivedUser>, _jwt_guard: JwtGuard) -> Result<Status, ErrorMessage> {
     let user = Db::new().get_user_repo().find(id)?;
@@ -155,6 +162,24 @@ fn delete_user(id: i32, _jwt_guard: JwtGuard) -> Result<Status, ErrorMessage> {
     Ok(Status::Ok)
 }
 
+#[get("/")]
+fn get_tags(_guard: JwtGuard) -> Json<Vec<SentTag>> {
+    let tags: Tags = Db::new().get_tag_repo().find_all().unwrap();
+
+    let sent_tags = tags.0.iter().map(|tag| {
+        SentTag::from(tag)
+    }).collect();
+
+    Json(sent_tags)
+}
+
+#[post("/", format = "json", data = "<received_tag>")]
+fn add_tag(_jwt_guard: JwtGuard, received_tag: Json<ReceivedTag>) -> Result<Status, ErrorMessage> {
+    Db::new().get_tag_repo().persist(&Tag::from(received_tag.into_inner()))?;
+
+    Ok(Status::Created)
+}
+
 #[catch(500)]
 fn internal_error() -> ErrorMessage {
     ErrorMessage::new(500, "Internal server error from catcher")
@@ -173,13 +198,13 @@ fn main() {
         allowed_headers: AllowedHeaders::all(),
         allow_credentials: true,
         ..Default::default()
-    }
-    .to_cors().unwrap();
+    }.to_cors().unwrap();
 
     rocket::ignite()
         .mount("/", routes![index, login])
-        .mount("/users", routes![add_user, get_users, get_me, delete_user, update_user_me,update_user  ])
+        .mount("/users", routes![add_user, get_users, get_user, get_me, delete_user, update_user_me,update_user  ])
         .mount("/posts", routes![post, posts, add_post, delete_post])
+        .mount("/tags", routes![get_tags, add_tag])
         .register(catchers![internal_error, not_found_error])
         .attach(cors)
         .launch();

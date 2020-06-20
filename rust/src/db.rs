@@ -6,6 +6,7 @@ use diesel::sqlite::SqliteConnection;
 use crate::repository::comment::CommentRepository;
 use crate::repository::post::PostRepository;
 use crate::repository::user::UserRepository;
+use crate::repository::tag::TagRepository;
 
 pub struct Db {
     con: SqliteConnection
@@ -40,6 +41,12 @@ impl Db {
 
     pub fn get_user_repo(&self) -> UserRepository {
         UserRepository {
+            con: &self.con
+        }
+    }
+
+    pub fn get_tag_repo(&self) -> TagRepository {
+        TagRepository {
             con: &self.con
         }
     }

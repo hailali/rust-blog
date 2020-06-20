@@ -173,6 +173,7 @@ pub struct NewPost {
     pub user_id: i32,
     pub title: String,
     pub body: String,
+    pub active: bool,
 }
 
 impl From<&Post> for NewPost {
@@ -180,7 +181,8 @@ impl From<&Post> for NewPost {
         Self {
             user_id: post.user_id.get(),
             title: post.title.clone(),
-            body: post.body.clone()
+            body: post.body.clone(),
+            active: post.active
         }
     }
 }
@@ -303,6 +305,7 @@ pub struct Tag {
     pub name: String
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Tags(pub Vec<Tag>);
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -320,7 +323,7 @@ pub struct NewTag {
 impl From<&Tag> for NewTag {
     fn from(tag: &Tag) -> Self {
         Self {
-            name: tag.name
+            name: tag.name.to_owned()
         }
     }
 }

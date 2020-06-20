@@ -8,7 +8,7 @@ use rocket::response::content;
 use rocket::response::Responder;
 use serde::{Deserialize, Serialize, Serializer};
 
-use crate::models::{ ModelId, Post, PostId, User, UserId};
+use crate::models::{ModelId, Post, PostId, User, UserId, TagId, Tag};
 use crate::security::PasswordEncoder;
 use diesel::result::Error;
 
@@ -56,7 +56,6 @@ pub struct ReceivedPost {
     pub active: bool,
 }
 
-
 #[derive(Debug, Serialize)]
 pub struct SentUser {
     pub id: i32,
@@ -79,7 +78,7 @@ impl From<&Post> for SentPost {
     fn from(other: &Post) -> Self {
         Self {
             id: other.id.get(),
-            user: format!("http://localhost:8000/user/{}", other.user_id.get()),
+            user: format!("http://localhost:8000/users/{}", other.user_id.get()),
             title: other.title.clone(),
             body: other.body.clone(),
             active: other.active,
@@ -175,5 +174,34 @@ impl<'r> Responder<'r> for ErrorMessage {
             .sized_body(Cursor::new(serde_json::to_string(&self).unwrap()))
             .status(status)
             .ok()
+    }
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ReceivedTag {
+    pub name: String
+}
+
+impl From<ReceivedTag> for Tag {
+    fn from(other: ReceivedTag) -> Self {
+        Self {
+            id: TagId::new(0),
+            name: other.name
+        }
+    }
+}
+
+#[derive(Debug, Serialize)]
+pub struct SentTag {
+    pub id: i32,
+    pub name: String,
+}
+
+impl From<&Tag> for SentTag {
+    fn from(tag: &Tag) -> Self {
+        Self {
+            id: tag.id.get(),
+            name: tag.name.to_owned()
+        }
     }
 }
