@@ -1,4 +1,6 @@
 import React from 'react';
+import UserClient from "./client/UserClient";
+
 
 export default class UserList extends React.Component {
     constructor(props) {
@@ -11,23 +13,11 @@ export default class UserList extends React.Component {
     }
 
     componentDidMount() {
-        getUsers()
-            .then(res => {
-                let contentType = res.headers.get("content-type");
-                if(res.ok && contentType && contentType.indexOf("application/json") !== -1) {
-                    return res.json()
-                } else {
-                    throw new Error('Error when retrieving the users. The response status code is '+res.status);
-                }
+        UserClient.getAll().then(users => {
+            this.setState({
+                users: users
             })
-            .then(users => {
-                this.setState({
-                    users: users
-                })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        })
     }
 
     render() {
@@ -64,16 +54,4 @@ export default class UserList extends React.Component {
             </div>
         )
     }
-}
-
-function getUsers(callback) {
-    return fetch("http://localhost:8000/users", {
-        method: 'GET',
-        mode: "cors",
-        cache: "no-cache",
-        headers: {
-            'Authorization': sessionStorage.getItem('token'),
-            'Content-Type': 'application/json'
-        }
-    })
 }
