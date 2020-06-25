@@ -194,7 +194,7 @@ fn main() {
     // You can also deserialize this
     let cors = rocket_cors::CorsOptions {
         allowed_origins: AllowedOrigins::All,
-        allowed_methods: vec![Method::Get, Method::Post].into_iter().map(From::from).collect(),
+        allowed_methods: vec![Method::Get, Method::Post, Method::Delete].into_iter().map(From::from).collect(),
         allowed_headers: AllowedHeaders::all(),
         allow_credentials: true,
         ..Default::default()

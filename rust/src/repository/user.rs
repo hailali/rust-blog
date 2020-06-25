@@ -19,8 +19,9 @@ impl RepositoryTrait for UserRepository<'_> {
     type Item = User;
     type Items = Users;
 
-    fn find(&self, _id: i32) -> Result<Option<Self::Item>, Error> {
-        let mut users: Vec<User> = user::table.filter(user::deleted.eq(false))
+    fn find(&self, id: i32) -> Result<Option<Self::Item>, Error> {
+        let mut users: Vec<User> = user::table
+            .filter(user::id.eq(id))
             .limit(1)
             .load::<User>(self.con)
             .expect("Error loading user");
