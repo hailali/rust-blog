@@ -11,6 +11,30 @@ export default class BaseClient {
         })
     }
 
+    static async post(url, data) {
+        return await fetch(url, {
+            method: 'POST',
+            mode: "cors",
+            cache: "no-cache",
+            headers: {
+                'Authorization': sessionStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: data
+        })
+    }
+
+    static async delete(url) {
+        return await fetch(url, {
+            method: 'DELETE',
+            mode: "cors",
+            cache: "no-cache",
+            headers: {
+                'Authorization': sessionStorage.getItem('token'),
+            }
+        })
+    }
+
     static async getJsonFromResponse(response) {
         let contentType = response.headers.get("content-type");
         if (response.ok && contentType && contentType.indexOf("application/json") !== -1) {

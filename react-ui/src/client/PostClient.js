@@ -1,10 +1,7 @@
-import UserClient from "./UserClient";
+import UserClient from "./UserClient.ts";
 import BaseClient from "./BaseClient";
 
 export default class PostClient extends BaseClient {
-    constructor() {
-        super();
-    }
 
     static async getAll() {
         try {

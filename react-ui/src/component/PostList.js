@@ -1,5 +1,5 @@
 import React from 'react';
-import PostClient from "./client/PostClient";
+import PostClient from "../client/PostClient";
 
 export default class PostList extends React.Component {
     constructor(props) {

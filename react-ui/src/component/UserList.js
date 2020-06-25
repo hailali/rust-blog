@@ -1,6 +1,6 @@
 import React from 'react';
-import UserClient from "./client/UserClient";
-
+import UserClient from "../client/UserClient.ts";
+import {TrashIcon} from "./Bootstrap";
 
 export default class UserList extends React.Component {
     constructor(props) {
@@ -8,8 +8,29 @@ export default class UserList extends React.Component {
 
         this.state = {
             users: [],
-            loaded: false
+            loaded: false,
+            deleteUserError: null
         }
+    }
+
+    handleDeleteUser(e, userId) {
+        e.preventDefault();
+
+        UserClient.delete(userId).then((isUserDeleted) => {
+            if (isUserDeleted) {
+                this.setState((state) => {
+                    let users = state.users.slice()
+                    return {
+                        users: users.filter(user => user.id !== userId),
+                        deleteUserError: null
+                    }
+                })
+            } else {
+                this.setState({
+                    deleteUserError: `An error occurred while deleting the user with id ${userId}`
+                })
+            }
+        })
     }
 
     componentDidMount() {
@@ -21,11 +42,14 @@ export default class UserList extends React.Component {
     }
 
     render() {
-        let {users, loaded} = this.state;
+        let {users, loaded, deleteUserError} = this.state;
 
         return (
             <div>
                 <h1>User list</h1>
+                {deleteUserError !== null ? <div className="alert alert-dark" role="alert">
+                    {deleteUserError}
+                </div> : ''}
                 <table className="table">
                     <thead>
                     <tr>
@@ -34,6 +58,7 @@ export default class UserList extends React.Component {
                         <th scope="col">Last name</th>
                         <th scope="col">email</th>
                         <th scope="col">username</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,6 +70,9 @@ export default class UserList extends React.Component {
                                 <td>{user.first_name}</td>
                                 <td>{user.email}</td>
                                 <td>{user.username}</td>
+                                <td>
+                                    <a href="#" onClick={(e) => this.handleDeleteUser(e, user.id)}><TrashIcon /></a>
+                                </td>
                             </tr>
                         )
                     })}

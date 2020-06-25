@@ -1,9 +1,12 @@
-import {BrowserRouter as Router, Link, Redirect, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import React from "react";
 import Home from "./Home";
 import UserList from "./UserList";
 import PostList from "./PostList";
-import App from "./App";
+import App from "../App";
+import TagList from "./TagList";
+import UserAdd from "./UserAdd.tsx";
+import {NavBar} from "./Bootstrap";
 
 function PrivateRoute({ children, ...rest }) {
     return (
@@ -32,31 +35,23 @@ export default function AppRouter() {
     return (
         <Router>
             <div>
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/users">Users</Link>
-                    </li>
-                    <li>
-                        <Link to="/posts">Posts</Link>
-                    </li>
-                    <li>
-                        <Link to="/login">Login</Link>
-                    </li>
-                </ul>
-
+                <NavBar />
                 <hr />
                 <Switch>
                     <Route exact path="/">
                         <Home />
+                    </Route>
+                    <Route exact path="/user/add">
+                        <UserAdd />
                     </Route>
                     <PrivateRoute path="/users">
                         <UserList />
                     </PrivateRoute>
                     <PrivateRoute path="/posts">
                         <PostList />
+                    </PrivateRoute>
+                    <PrivateRoute path="/tags">
+                        <TagList />
                     </PrivateRoute>
                     <Route path="/login">
                         <App />
