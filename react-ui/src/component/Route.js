@@ -3,19 +3,19 @@ import React from "react";
 import Home from "./Home";
 import UserList from "./UserList";
 import PostList from "./PostList";
-import App from "../App";
+import App from "./Login";
 import TagList from "./TagList";
 import UserAdd from "./UserAdd.tsx";
 import {NavBar} from "./Bootstrap";
+import {PostAdd} from "./PostAdd.tsx";
+import {isUserAuthenticated} from "./UserUtils.ts";
 
 function PrivateRoute({ children, ...rest }) {
     return (
         <Route
             {...rest}
             render={({ location }) =>
-                sessionStorage.getItem('exp') !== null &&
-                sessionStorage.getItem('token') !== null &&
-                sessionStorage.getItem('exp') > Math.floor(Date.now() / 1000) ? (
+                isUserAuthenticated() ? (
                     children
                 ) : (
                     <Redirect
@@ -41,11 +41,14 @@ export default function AppRouter() {
                     <Route exact path="/">
                         <Home />
                     </Route>
-                    <Route exact path="/user/add">
+                    <Route exact path="/users/add">
                         <UserAdd />
                     </Route>
                     <PrivateRoute path="/users">
                         <UserList />
+                    </PrivateRoute>
+                    <PrivateRoute path="/posts/add">
+                        <PostAdd />
                     </PrivateRoute>
                     <PrivateRoute path="/posts">
                         <PostList />

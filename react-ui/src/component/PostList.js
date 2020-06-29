@@ -1,5 +1,6 @@
 import React from 'react';
-import PostClient from "../client/PostClient";
+import PostClient from "../client/PostClient.ts";
+import {TrashIcon} from "./Bootstrap";
 
 export default class PostList extends React.Component {
     constructor(props) {
@@ -7,7 +8,8 @@ export default class PostList extends React.Component {
 
         this.state = {
             posts: [],
-            loaded: false
+            loaded: false,
+            deleteError: null
         }
     }
 
@@ -19,12 +21,37 @@ export default class PostList extends React.Component {
         });
     }
 
+    handleDelete(e, postId) {
+        e.preventDefault()
+
+        PostClient.delete(postId).then((isPostDeleted) => {
+            if (isPostDeleted) {
+                this.setState((state) => {
+                    let posts = state.posts.slice().filter((post) => {
+                        return post.id !== postId
+                    });
+
+                    return {
+                        posts: posts
+                    }
+                })
+            } else {
+                this.setState({
+                    deleteError: `An error occurred during the deleting of the post with id "${postId}"`
+                })
+            }
+        })
+    }
+
     render() {
-        let {posts, loaded} = this.state;
+        let {posts, loaded, deleteError} = this.state;
 
         return (
             <div>
                 <h1>Posts list</h1>
+                {deleteError !== null ? <div className="alert alert-dark" role="alert">
+                    {deleteError}
+                </div> : ''}
                 <table className="table">
                     <thead>
                     <tr>
@@ -33,6 +60,7 @@ export default class PostList extends React.Component {
                         <th scope="col">Title</th>
                         <th scope="col">Body</th>
                         <th scope="col">Active</th>
+                        <th scope="col"/>
                     </tr>
                     </thead>
                     <tbody>
@@ -43,7 +71,10 @@ export default class PostList extends React.Component {
                                 <td>{post.user}</td>
                                 <td>{post.title}</td>
                                 <td>{post.body}</td>
-                                <td>{post.active}</td>
+                                <td>{post.active ? 'Yes' : 'No'}</td>
+                                <td>
+                                    <a href="" onClick={(e) => this.handleDelete(e, post.id)}><TrashIcon /></a>
+                                </td>
                             </tr>
                         )
                     })}

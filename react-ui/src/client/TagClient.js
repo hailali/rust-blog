@@ -1,4 +1,4 @@
-import BaseClient from "./BaseClient";
+import BaseClient from "./BaseClient.ts";
 
 export default class TagClient extends BaseClient {
     static async findAll() {

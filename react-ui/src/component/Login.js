@@ -1,10 +1,10 @@
 import React from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/boots';
+import '../App.css';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {Redirect} from "react-router-dom";
-import {Card} from "./component/Bootstrap";
-import LoginClient from "./client/LoginClient";
+import {Card} from "./Bootstrap";
+import LoginClient from "../client/LoginClient";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -35,7 +35,7 @@ export default class Login extends React.Component {
                     authenticated: true
                 })
             } else {
-                sessionStorage.removeItem('token');
+                sessionStorage.clear();
                 this.setState({
                     authenticationError: true
                 })

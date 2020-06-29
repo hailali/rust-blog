@@ -1,5 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import {logOut} from "./UserUtils.ts"
+import {Login} from "./Login";
 
 export function Card({title, children}) {
     return (
@@ -24,27 +26,47 @@ export function TrashIcon() {
     )
 }
 
+export function PersonCircleIcon() {
+    return (
+        <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-person-circle" fill="currentColor"
+             xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
+            <path fillRule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            <path fillRule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
+        </svg>
+    )
+}
+
 export function Field({type, name, label}) {
     return (
         <div className="form-group row">
             <label htmlFor={name} className="col-sm-4 col-form-label">{label}</label>
             <div className="col-sm-8">
-                <input type={type} name={name} className="form-control" id={name} />
+                <input type={type} name={name} className="form-control" id={name}/>
             </div>
         </div>
     )
 }
 
 export function TextField({name, label}) {
-    return <Field type="text" name={name} label={label} />
+    return <Field type="text" name={name} label={label}/>
 }
 
 export function PasswordField({name, label}) {
-    return <Field type="password" name={name} label={label} />
+    return <Field type="password" name={name} label={label}/>
 }
 
+export function TextareaField({name, label}) {
+    return (
+        <div className="form-group">
+            <label htmlFor={name}>{label}</label>
+            <textarea className="form-control" id={name} rows="3"/>
+        </div>
+    )
+}
 
-export function NavBar() {
+export function NavBar({isUserAuthenticated}) {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <button className="navbar-toggler" type="button" data-toggle="collapse"
@@ -54,29 +76,59 @@ export function NavBar() {
             </button>
 
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav mr-auto">
+                <ul className="navbar-nav mr-auto order-1">
                     <li className="nav-item active">
                         <Link to="/" className="nav-link">Home <span className="sr-only">(current)</span></Link>
                     </li>
-                    <li className="nav-item active">
-                        <Link to="/posts" className="nav-link">Posts <span className="sr-only">(current)</span></Link>
+                    <li className="nav-item dropdown">
+                        <Link className="nav-link dropdown-toggle" to="/posts" id="navbarDropdown" role="button"
+                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Posts
+                        </Link>
+                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <Link className="dropdown-item" to="/posts">Posts list</Link>
+                            <Link className="dropdown-item" to="/posts/add">Post add</Link>
+                        </div>
                     </li>
-                    <li className="nav-item active">
+                    <li className="nav-item">
                         <Link to="/tags" className="nav-link">Tags <span className="sr-only">(current)</span></Link>
                     </li>
-                    <li className="nav-item active">
-                        <Link to="/login" className="nav-link">Login <span className="sr-only">(current)</span></Link>
-                    </li>
                     <li className="nav-item dropdown">
-                        <Link  className="nav-link dropdown-toggle" to="/users" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <Link className="nav-link dropdown-toggle" to="/users" id="navbarDropdown" role="button"
+                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Users
-                        </Link> 
+                        </Link>
                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <Link className="dropdown-item" to="/user/add">User add</Link>
+                            <Link className="dropdown-item" to="/users">User list</Link>
+                            <Link className="dropdown-item" to="/users/add">User add</Link>
                         </div>
                     </li>
                 </ul>
+                {!isUserAuthenticated ?
+                    <ul className="navbar-nav d-none d-lg-flex ml-2 order-2">
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/login">Login</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/users/add">Register</Link>
+                        </li>
+                    </ul>
+                    : ''}
+                <div className="navbar-nav d-none d-lg-flex ml-2 order-3">
+                    {isUserAuthenticated ?
+                        <div className="nav-item dropdown">
+                            <a className="dropdown-toggle navbar-icon-link" id="userdetails" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="true">
+                                <PersonCircleIcon/>
+                            </a>
+                            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userdetails">
+                                <a className="dropdown-item" href="#" onClick={() => {
+                                    logOut()
+                                }}>Logout </a>
+                            </div>
+                        </div>
+                        : ''}
+                </div>
             </div>
         </nav>
     )

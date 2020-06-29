@@ -1,5 +1,5 @@
 export default class BaseClient {
-    static async get(url) {
+    static async get(url: string): Promise<Response> {
         return await fetch(url, {
             method: 'GET',
             mode: "cors",
@@ -11,7 +11,7 @@ export default class BaseClient {
         })
     }
 
-    static async post(url, data) {
+    static async post(url: string, data: string): Promise<Response> {
         return await fetch(url, {
             method: 'POST',
             mode: "cors",
@@ -24,7 +24,7 @@ export default class BaseClient {
         })
     }
 
-    static async delete(url) {
+    static async delete(url: string): Promise<Response> {
         return await fetch(url, {
             method: 'DELETE',
             mode: "cors",
@@ -35,7 +35,7 @@ export default class BaseClient {
         })
     }
 
-    static async getJsonFromResponse(response) {
+    static async getJsonFromResponse(response: Response) {
         let contentType = response.headers.get("content-type");
         if (response.ok && contentType && contentType.indexOf("application/json") !== -1) {
             return await response.json();

@@ -1,4 +1,4 @@
-import BaseClient from "./BaseClient";
+import BaseClient from "./BaseClient.ts";
 import jwt from "jwt-decode";
 
 export default class LoginClient extends BaseClient {

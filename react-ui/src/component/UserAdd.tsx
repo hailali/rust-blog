@@ -2,32 +2,14 @@ import React, {RefObject} from "react";
 import {Card, TextField, PasswordField} from "./Bootstrap"
 import UserClient from "../client/UserClient.ts";
 
-interface PropsInterface {}
-
-interface UserInterface {
-    username: string,
-    password: string,
-    last_name: string,
-    first_name: string,
-    email: string,
-}
-
 interface StateInterface {
-    user: UserInterface
     userCreatedSuccessfully: boolean
 }
 
-export default class UserAdd extends React.Component<PropsInterface, StateInterface> {
+export default class UserAdd extends React.Component<any, StateInterface> {
     ref_form: RefObject<string> = React.createRef();
 
     state: StateInterface = {
-        user: {
-            username: "",
-            password: "",
-            last_name: "",
-            first_name: "",
-            email: "",
-        },
         userCreatedSuccessfully: false
     }
 

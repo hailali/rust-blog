@@ -1,7 +1,11 @@
-import BaseClient from "./BaseClient";
+import BaseClient from "./BaseClient.ts";
 
-interface UserSent {
-    first_name: string
+interface UserSentInterface {
+    username: string,
+    password: string,
+    last_name: string,
+    first_name: string,
+    email: string,
 }
 
 export default class UserClient extends BaseClient {
@@ -23,7 +27,7 @@ export default class UserClient extends BaseClient {
         return await super.getJsonFromResponse(response)
     }
 
-    static async create(user: UserSent) {
+    static async create(user: UserSentInterface) {
         try {
             let response = await super.post("http://localhost:8000/users", JSON.stringify(user))
 
