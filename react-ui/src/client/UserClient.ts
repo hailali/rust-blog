@@ -1,4 +1,4 @@
-import BaseClient from "./BaseClient.ts";
+import BaseClient from "./BaseClient";
 
 interface UserSentInterface {
     username: string,
@@ -9,10 +9,6 @@ interface UserSentInterface {
 }
 
 export default class UserClient extends BaseClient {
-    constructor() {
-        super();
-    }
-
     static async getAll() {
         try {
             let response = await super.get("http://localhost:8000/users")
@@ -22,7 +18,7 @@ export default class UserClient extends BaseClient {
         }
     }
 
-    static async getByUrl(url) {
+    static async getByUrl(url: string) {
         let response = await super.get(url)
         return await super.getJsonFromResponse(response)
     }
@@ -39,7 +35,7 @@ export default class UserClient extends BaseClient {
         }
     }
 
-    static async delete(userId: number): Promise<boolean> {
+    static async deleteUser(userId: number): Promise<boolean> {
         try {
             let response = await super.delete(`http://localhost:8000/users/${userId}`)
 

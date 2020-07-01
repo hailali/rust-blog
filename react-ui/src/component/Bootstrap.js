@@ -1,7 +1,8 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import {logOut} from "./UserUtils.ts"
-import {Login} from "./Login";
+import {Link} from "react-router-dom"
+import {connect} from "react-redux";
+import {USER_LOGOUT_ACTION} from "../redux/actions";
+import {userLogOut} from "./UserUtils";
 
 export function Card({title, children}) {
     return (
@@ -66,13 +67,15 @@ export function TextareaField({name, label}) {
     )
 }
 
-export function NavBar({isUserAuthenticated}) {
+let NavBar = function ({isUserAuthenticated, onLogout}) {
+    console.log("NAV BAR COMPONENT DISPLAYED", isUserAuthenticated, onLogout)
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
+                <span className="navbar-toggler-icon"/>
             </button>
 
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -123,7 +126,9 @@ export function NavBar({isUserAuthenticated}) {
                             </a>
                             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userdetails">
                                 <a className="dropdown-item" href="#" onClick={() => {
-                                    logOut()
+                                    userLogOut();
+                                    onLogout();
+                                    console.log("On click link")
                                 }}>Logout </a>
                             </div>
                         </div>
@@ -133,3 +138,22 @@ export function NavBar({isUserAuthenticated}) {
         </nav>
     )
 }
+
+const mapStateToProps = (state) => {
+    return {
+        isUserAuthenticated: state.isUserAuthenticated
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogout: () => dispatch(USER_LOGOUT_ACTION),
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(NavBar)
+
+

@@ -1,6 +1,6 @@
 import React, {RefObject} from "react";
 import {TextField, TextareaField, Card} from './Bootstrap'
-import PostClient from "../client/PostClient.ts";
+import PostClient from "../client/PostClient";
 
 interface StateInterface {
     postCreatedSuccessfully: boolean
@@ -8,10 +8,10 @@ interface StateInterface {
 
 export class PostAdd extends React.Component<any, StateInterface> {
     private readonly ref_form: RefObject<any>
-    private state: StateInterface
+    state: StateInterface
 
-    constructor() {
-        super()
+    constructor(props: any) {
+        super(props)
 
         this.ref_form = React.createRef()
         this.state = {
@@ -19,14 +19,14 @@ export class PostAdd extends React.Component<any, StateInterface> {
         }
     }
 
-    private handleSubmit(e) {
+    private handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         PostClient.create({
             'title': this.ref_form.current['title'].value,
             'body': this.ref_form.current['body'].value,
             'active': true
-        }).then((isPostCreated) => {
+        }).then((isPostCreated: boolean) => {
             if (isPostCreated) {
                 this.ref_form.current.reset()
                 this.setState({

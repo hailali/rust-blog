@@ -3,10 +3,10 @@ import React from "react";
 import Home from "./Home";
 import UserList from "./UserList";
 import PostList from "./PostList";
-import App from "./Login";
+import Login from "./Login";
 import TagList from "./TagList";
 import UserAdd from "./UserAdd.tsx";
-import {NavBar} from "./Bootstrap";
+import NavBar from "./Bootstrap";
 import {PostAdd} from "./PostAdd.tsx";
 import {isUserAuthenticated} from "./UserUtils.ts";
 
@@ -57,7 +57,7 @@ export default function AppRouter() {
                         <TagList />
                     </PrivateRoute>
                     <Route path="/login">
-                        <App />
+                        <Login />
                     </Route>
                 </Switch>
             </div>

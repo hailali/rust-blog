@@ -1,3 +1,7 @@
+import {getUserToken} from "../component/UserUtils";
+
+const userToken = getUserToken();
+
 export default class BaseClient {
     static async get(url: string): Promise<Response> {
         return await fetch(url, {
@@ -5,7 +9,7 @@ export default class BaseClient {
             mode: "cors",
             cache: "no-cache",
             headers: {
-                'Authorization': sessionStorage.getItem('token'),
+                'Authorization': userToken,
                 'Content-Type': 'application/json'
             }
         })
@@ -17,7 +21,7 @@ export default class BaseClient {
             mode: "cors",
             cache: "no-cache",
             headers: {
-                'Authorization': sessionStorage.getItem('token'),
+                'Authorization': userToken,
                 'Content-Type': 'application/json'
             },
             body: data
@@ -30,7 +34,7 @@ export default class BaseClient {
             mode: "cors",
             cache: "no-cache",
             headers: {
-                'Authorization': sessionStorage.getItem('token'),
+                'Authorization': userToken,
             }
         })
     }

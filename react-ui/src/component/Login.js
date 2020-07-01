@@ -5,8 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Redirect} from "react-router-dom";
 import {Card} from "./Bootstrap";
 import LoginClient from "../client/LoginClient";
+import {USER_LOGIN_ACTION, USER_LOGOUT_ACTION} from "../redux/actions";
+import {connect} from "react-redux";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
 
@@ -34,6 +36,8 @@ export default class Login extends React.Component {
                 this.setState({
                     authenticated: true
                 })
+
+                this.props.onLogin();
             } else {
                 sessionStorage.clear();
                 this.setState({
@@ -44,6 +48,8 @@ export default class Login extends React.Component {
     }
 
     render() {
+        console.log("LOGIN COMPONENT DISPLAYED", "isUserAuthenticated __> ", this.props.isUserAuthenticated)
+
         const {username, password, authenticated, authenticationError} = this.state
 
         return (
@@ -76,3 +82,20 @@ export default class Login extends React.Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        isUserAuthenticated: state.isUserAuthenticated
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogin: () => dispatch(USER_LOGIN_ACTION),
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Login)

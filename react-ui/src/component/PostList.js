@@ -24,7 +24,7 @@ export default class PostList extends React.Component {
     handleDelete(e, postId) {
         e.preventDefault()
 
-        PostClient.delete(postId).then((isPostDeleted) => {
+        PostClient.deletePost(postId).then((isPostDeleted) => {
             if (isPostDeleted) {
                 this.setState((state) => {
                     let posts = state.posts.slice().filter((post) => {

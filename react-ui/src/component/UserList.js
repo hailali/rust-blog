@@ -16,7 +16,7 @@ export default class UserList extends React.Component {
     handleDeleteUser(e, userId) {
         e.preventDefault();
 
-        UserClient.delete(userId).then((isUserDeleted) => {
+        UserClient.deleteUser(userId).then((isUserDeleted) => {
             if (isUserDeleted) {
                 this.setState((state) => {
                     let users = state.users.slice()

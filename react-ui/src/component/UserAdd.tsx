@@ -1,13 +1,13 @@
 import React, {RefObject} from "react";
 import {Card, TextField, PasswordField} from "./Bootstrap"
-import UserClient from "../client/UserClient.ts";
+import UserClient from "../client/UserClient";
 
 interface StateInterface {
     userCreatedSuccessfully: boolean
 }
 
 export default class UserAdd extends React.Component<any, StateInterface> {
-    ref_form: RefObject<string> = React.createRef();
+    ref_form: HTMLFormElement;
 
     state: StateInterface = {
         userCreatedSuccessfully: false
@@ -15,6 +15,8 @@ export default class UserAdd extends React.Component<any, StateInterface> {
 
     private handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
+
+        // @ts-ignore
         let [username, password, last_name, first_name, email] = this.ref_form.getElementsByTagName("input");
 
         UserClient.create({
@@ -25,6 +27,7 @@ export default class UserAdd extends React.Component<any, StateInterface> {
             email: email.value,
         }).then((userCreated) => {
             if (userCreated) {
+                // @ts-ignore
                 this.ref_form.reset()
                 this.setState({
                     userCreatedSuccessfully: true
@@ -43,7 +46,7 @@ export default class UserAdd extends React.Component<any, StateInterface> {
                         User created successfully !
                     </div> : ''}
                     <div className="container">
-                        <form ref={(ref) => this.ref_form = ref} onSubmit={(e) => this.handleSubmit(e)}>
+                        <form ref={(ref) => {this.ref_form = ref}} onSubmit={(e) => this.handleSubmit(e)}>
                             <TextField name="username" label="Username"/>
                             <PasswordField name="password" label="Password"/>
                             <TextField name="last_name" label="Last name"/>
