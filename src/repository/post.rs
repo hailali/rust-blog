@@ -43,6 +43,7 @@ impl RepositoryTrait for PostRepository<'_> {
         diesel::update(post::table.find(item.id.get()))
             .set(&PostForm {
                 title: Some(&item.title),
+                sub_title: Some(&item.sub_title),
                 body: Some(&item.body),
             })
             .execute(self.con)?;

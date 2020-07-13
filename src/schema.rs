@@ -12,9 +12,11 @@ table! {
         id -> Integer,
         user_id -> Integer,
         title -> Text,
+        sub_title -> Text,
         body -> Text,
         active -> Bool,
         deleted -> Bool,
+        created_at -> Timestamp,
     }
 }
 
@@ -44,7 +46,6 @@ table! {
     }
 }
 
-joinable!(comment -> post (post_id));
 joinable!(post -> user (user_id));
 joinable!(tag_user -> tag (tag_id));
 joinable!(tag_user -> user (user_id));

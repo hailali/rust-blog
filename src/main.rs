@@ -14,11 +14,11 @@ use rocket_contrib::json::Json;
 use rocket_cors;
 use rocket_cors::{AllowedHeaders, AllowedOrigins};
 
-use hello_rocket::db::Db;
-use hello_rocket::models::{ModelId, Post, Posts, Tag, Tags, User, UserId, Users};
-use hello_rocket::repository::RepositoryTrait;
-use hello_rocket::security::{JwtGuard, JwtToken, LoginInfo, PasswordEncoder};
-use hello_rocket::serialization::{ErrorMessage, ReceivedPost, ReceivedTag, ReceivedUser, SentTag};
+use blog::db::Db;
+use blog::models::{ModelId, Post, Posts, Tag, Tags, User, UserId, Users};
+use blog::repository::RepositoryTrait;
+use blog::security::{JwtGuard, JwtToken, LoginInfo, PasswordEncoder};
+use blog::serialization::{ErrorMessage, ReceivedPost, ReceivedTag, ReceivedUser, SentTag};
 
 #[get("/")]
 fn index() -> &'static str {
@@ -110,7 +110,7 @@ fn get_me(jwt_guard: JwtGuard) -> Result<Option<User>, ErrorMessage> {
 }
 
 #[get("/<id>")]
-fn get_user(_jwt_guard: JwtGuard, id: i32) -> Result<Option<User>, ErrorMessage> {
+fn get_user(id: i32) -> Result<Option<User>, ErrorMessage> {
     let user = Db::new().get_user_repo().find(id)?;
 
     Ok(user)
@@ -163,7 +163,7 @@ fn delete_user(id: i32, _jwt_guard: JwtGuard) -> Result<Status, ErrorMessage> {
 }
 
 #[get("/")]
-fn get_tags(_guard: JwtGuard) -> Json<Vec<SentTag>> {
+fn get_tags() -> Json<Vec<SentTag>> {
     let tags: Tags = Db::new().get_tag_repo().find_all().unwrap();
 
     let sent_tags = tags.0.iter().map(|tag| {
@@ -202,9 +202,15 @@ fn main() {
 
     rocket::ignite()
         .mount("/", routes![index, login])
-        .mount("/users", routes![add_user, get_users, get_user, get_me, delete_user, update_user_me,update_user  ])
-        .mount("/posts", routes![post, posts, add_post, delete_post])
-        .mount("/tags", routes![get_tags, add_tag])
+
+        .mount("/admin/users", routes![get_users, get_user, get_me, delete_user, update_user_me,update_user  ])
+        .mount("/admin/posts", routes![add_post, delete_post])
+        .mount("/admin/tags", routes![add_tag])
+
+        .mount("/api/users", routes![add_user, get_user])
+        .mount("/api/posts", routes![post, posts])
+        .mount("/api/tags", routes![get_tags])
+
         .register(catchers![internal_error, not_found_error])
         .attach(cors)
         .launch();

@@ -162,9 +162,11 @@ pub struct Post {
     pub id: PostId,
     pub user_id: UserId,
     pub title: String,
+    pub sub_title: String,
     pub body: String,
     pub active: bool,
     pub deleted: bool,
+    pub created_at: String,
 }
 
 #[derive(Insertable)]
@@ -172,6 +174,7 @@ pub struct Post {
 pub struct NewPost {
     pub user_id: i32,
     pub title: String,
+    pub sub_title: String,
     pub body: String,
     pub active: bool,
 }
@@ -181,6 +184,7 @@ impl From<&Post> for NewPost {
         Self {
             user_id: post.user_id.get(),
             title: post.title.clone(),
+            sub_title: post.sub_title.to_string(),
             body: post.body.clone(),
             active: post.active
         }
@@ -191,33 +195,38 @@ impl From<&Post> for NewPost {
 #[table_name="post"]
 pub struct PostForm<'a> {
     pub title: Option<&'a String>,
+    pub sub_title: Option<&'a String>,
     pub body: Option<&'a String>,
 }
 
 impl Queryable<post::SqlType, DB> for Post {
-    type Row = (i32, i32, String, String, bool, bool);
+    type Row = (i32, i32, String, String, String, bool, bool, String);
 
     fn build(row: Self::Row) -> Self {
         Post {
             id: PostId::new(row.0),
             user_id: UserId::new(row.1),
             title: row.2,
-            body: row.3,
-            active: row.4,
-            deleted: row.5,
+            sub_title: row.3,
+            body: row.4,
+            active: row.5,
+            deleted: row.6,
+            created_at: row.7
         }
     }
 }
 
 impl Post {
-    pub fn new(user_id: UserId, title: String, body: String) -> Self {
+    pub fn new(user_id: UserId, title: String, sub_title: String, body: String) -> Self {
         Post {
             id: PostId::new(0),
             user_id,
             title,
+            sub_title,
             body,
             active: true,
             deleted: false,
+            created_at: "".to_string()
         }
     }
 }

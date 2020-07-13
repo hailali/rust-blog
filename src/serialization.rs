@@ -45,13 +45,16 @@ pub struct SentPost {
     pub id: i32,
     pub user: String,
     pub title: String,
+    pub sub_title: String,
     pub body: String,
     pub active: bool,
+    pub created_at: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ReceivedPost {
     pub title: String,
+    pub sub_title: String,
     pub body: String,
     pub active: bool,
 }
@@ -78,10 +81,12 @@ impl From<&Post> for SentPost {
     fn from(other: &Post) -> Self {
         Self {
             id: other.id.get(),
-            user: format!("http://localhost:8000/users/{}", other.user_id.get()),
+            user: format!("http://localhost:8000/api/users/{}", other.user_id.get()),
             title: other.title.clone(),
+            sub_title: other.sub_title.clone(),
             body: other.body.clone(),
             active: other.active,
+            created_at: other.created_at.clone()
         }
     }
 }
@@ -104,9 +109,11 @@ impl From<&ReceivedPost> for Post {
             id: PostId::new(0),
             user_id: UserId::new(0),
             title: other.title.clone(),
+            sub_title: other.sub_title.clone(),
             body: other.body.clone(),
             active: other.active,
-            deleted: false
+            deleted: false,
+            created_at: "".to_string()
         }
     }
 }
