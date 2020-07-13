@@ -14,8 +14,8 @@ impl RepositoryTrait for PostRepository<'_> {
     type Item = Post;
     type Items = Posts;
 
-    fn find(&self, _id: i32) -> Result<Option<Self::Item>, Error> {
-        let mut posts: Vec<Post> = post::table.filter(post::deleted.eq(false))
+    fn find(&self, id: i32) -> Result<Option<Self::Item>, Error> {
+        let mut posts: Vec<Post> = post::table.filter(post::id.eq(id))
             .limit(1)
             .load::<Post>(self.con)
             .expect("Error loading post");

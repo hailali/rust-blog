@@ -43,14 +43,14 @@ fn login(login_info: Json<LoginInfo>) -> Result<Json<JwtToken>, Status> {
 }
 
 #[get("/")]
-fn posts() -> Json<Posts> {
+fn get_posts() -> Json<Posts> {
     let posts = Db::new().get_post_repo().find_all().unwrap();
 
     Json(posts)
 }
 
 #[get("/<id>")]
-fn post(id: i32) -> Result<Option<Post>, Error> {
+fn get_post(id: i32) -> Result<Option<Post>, Error> {
     Db::new().get_post_repo().find(id)
 }
 
@@ -111,6 +111,13 @@ fn get_me(jwt_guard: JwtGuard) -> Result<Option<User>, ErrorMessage> {
 
 #[get("/<id>")]
 fn get_user(id: i32) -> Result<Option<User>, ErrorMessage> {
+    let user = Db::new().get_user_repo().find(id)?;
+
+    Ok(user)
+}
+
+#[get("/<id>")]
+fn get_user_admin(_jwt_guard: JwtGuard, id: i32) -> Result<Option<User>, ErrorMessage> {
     let user = Db::new().get_user_repo().find(id)?;
 
     Ok(user)
@@ -203,12 +210,12 @@ fn main() {
     rocket::ignite()
         .mount("/", routes![index, login])
 
-        .mount("/admin/users", routes![get_users, get_user, get_me, delete_user, update_user_me,update_user  ])
+        .mount("/admin/users", routes![get_users, get_user_admin, get_me, delete_user, update_user_me,update_user  ])
         .mount("/admin/posts", routes![add_post, delete_post])
         .mount("/admin/tags", routes![add_tag])
 
         .mount("/api/users", routes![add_user, get_user])
-        .mount("/api/posts", routes![post, posts])
+        .mount("/api/posts", routes![get_post, get_posts])
         .mount("/api/tags", routes![get_tags])
 
         .register(catchers![internal_error, not_found_error])
