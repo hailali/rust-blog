@@ -66,7 +66,7 @@ paths:
     post:
       tags:
       - post
-      summary: Add a new post to the store
+      summary: Add a new post
       operationId: addPost
       requestBody:
         description: Post object that needs to be added to the store
@@ -82,7 +82,7 @@ paths:
     delete:
       tags:
       - post
-      summary: Deletes a post
+      summary: Delete a post
       operationId: deletePost
       responses:
         400:
@@ -91,11 +91,28 @@ paths:
         404:
           description: Post not found
           content: {}
-  /post:
+  /posts:
+    get:
+      tags:
+      - post
+      summary: Find all posts
+      description: Returns an array of posts
+      operationId: getPosts
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+      security:
+      - api_key: []
     post:
       tags:
       - post
-      summary: Updates a post in the store with form data
+      summary: Updates a post
       operationId: createPost
       requestBody:
         description: Post content
@@ -109,6 +126,23 @@ paths:
           description: Post created successfully
           content: {}
   /user:
+    get:
+      tags:
+      - user
+      summary: Find all users
+      description: Returns an array of users
+      operationId: getUsers
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      security:
+      - api_key: []
     post:
       tags:
       - user
@@ -251,7 +285,7 @@ paths:
       requestBody:
         description: Updated user object
         content:
-          '*/*':
+          'application/json':
             schema:
               $ref: '#/components/schemas/UserUpdate'
         required: true
@@ -261,6 +295,39 @@ paths:
           content: {}
         404:
           description: User not found
+          content: {}
+  /tags:
+    get:
+      tags:
+        - tag
+      summary: Get a list of tags
+      operationId: getTags
+      responses:
+        200:
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+    post:
+      tags:
+        - tag
+      summary: Add a new tag
+      operationId: addTag
+      requestBody:
+        description: Json to add a new tag
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Tag'
+      responses:
+        201:
+          description: Tag added successfully
+          content: {}
+        400:
+          description: Invalid tag supplied
           content: {}
 components:
   schemas:
@@ -348,16 +415,6 @@ components:
           type: integer
           format: int64
         name:
-          type: string
-    ApiResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        type:
-          type: string
-        message:
           type: string
   securitySchemes:
     api_key:
